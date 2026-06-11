@@ -1,0 +1,284 @@
+<html><head><style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-tap-highlight-color:transparent}
+body{background:#0a0a0a;font-family:'Press Start 2P',monospace;overflow:hidden}
+#g{width:380px;height:600px;background:#111;position:relative;overflow:hidden;border:3px solid #333}
+#sky{position:absolute;top:0;left:0;right:0;height:340px;background:linear-gradient(#0a1a3a,#1a3a6a)}
+#ground{position:absolute;bottom:0;left:0;right:0;height:140px;background:#2d1a0a;border-top:4px solid #5a3a1a}
+#grass{position:absolute;bottom:136px;left:0;right:0;height:8px;background:#1a7a1a}
+#player{position:absolute;bottom:144px;left:40px;width:40px;height:48px;transition:none}
+.eye{position:absolute;width:8px;height:8px;background:#fff;border:2px solid #000;border-radius:50%}
+.pupil{position:absolute;width:4px;height:4px;background:#000;border-radius:50%;top:2px;left:2px}
+#score-bar{position:absolute;top:0;left:0;right:0;height:48px;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:2px solid #444;z-index:10}
+#score-txt,#hi-txt,#lives-txt{font-size:8px;color:#fff}
+#score-txt span,#hi-txt span,#lives-txt span{color:#ff0}
+#coins-row{position:absolute;top:60px;left:0;right:0;height:20px}
+.coin{position:absolute;width:18px;height:18px;background:#ffd700;border-radius:50%;border:3px solid #b8860b;top:0;animation:coinbob 0.6s infinite alternate}
+@keyframes coinbob{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+.obs{position:absolute;bottom:144px;width:32px;height:48px;background:#8B0000;border:3px solid #ff0000;border-radius:4px 4px 0 0}
+.obs::before{content:'👹';font-size:22px;position:absolute;top:-4px;left:2px}
+#overlay{position:absolute;inset:0;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;gap:16px}
+#overlay h1{font-size:18px;color:#ff0;text-shadow:0 0 10px #ff0;text-align:center;line-height:1.6}
+#overlay p{font-size:9px;color:#aaa;text-align:center;line-height:2}
+#btn{background:#ff0;color:#000;border:none;padding:12px 24px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;border-radius:4px;margin-top:8px}
+#btn:active{transform:scale(0.95)}
+#tap-hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:7px;color:#555;z-index:5}
+#clouds{position:absolute;top:60px;left:0;right:0;height:60px;pointer-events:none}
+.cloud{position:absolute;height:24px;background:rgba(255,255,255,0.12);border-radius:20px}
+#stars{position:absolute;top:0;left:0;right:0;height:200px;pointer-events:none}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0.6}
+#trail{position:absolute;pointer-events:none}
+.dust{position:absolute;width:6px;height:6px;background:#888;border-radius:50%;opacity:0.7;pointer-events:none}
+#combo{position:absolute;top:56px;right:12px;font-size:8px;color:#ff6;opacity:0;transition:opacity 0.3s;z-index:10}
+#msg{position:absolute;top:80px;left:0;right:0;text-align:center;font-size:10px;color:#ff6;opacity:0;z-index:10;pointer-events:none}
+</style>
+
+</head><body><div id="g">
+  <div id="sky"></div>
+  <div id="stars"><div class="star" style="left: 191.627px; top: 138.492px; opacity: 0.909647;"></div><div class="star" style="left: 255.238px; top: 115.843px; opacity: 0.366964;"></div><div class="star" style="left: 63.1858px; top: 1.92074px; opacity: 0.38455;"></div><div class="star" style="left: 294.981px; top: 61.2148px; opacity: 0.366901;"></div><div class="star" style="left: 15.256px; top: 143.071px; opacity: 0.549842;"></div><div class="star" style="left: 88.0549px; top: 101.666px; opacity: 0.260316;"></div><div class="star" style="left: 61.8154px; top: 17.705px; opacity: 0.446541;"></div><div class="star" style="left: 265.922px; top: 69.1071px; opacity: 0.726321;"></div><div class="star" style="left: 224.02px; top: 106.652px; opacity: 0.48509;"></div><div class="star" style="left: 351.01px; top: 116.173px; opacity: 0.88707;"></div><div class="star" style="left: 171.625px; top: 107.953px; opacity: 0.636405;"></div><div class="star" style="left: 202.706px; top: 117.2px; opacity: 0.747816;"></div><div class="star" style="left: 369.148px; top: 104.299px; opacity: 0.736326;"></div><div class="star" style="left: 141.681px; top: 129.572px; opacity: 0.377579;"></div><div class="star" style="left: 231.303px; top: 132.485px; opacity: 0.38444;"></div><div class="star" style="left: 134.555px; top: 31.3369px; opacity: 0.362571;"></div><div class="star" style="left: 342.775px; top: 11.7501px; opacity: 0.945643;"></div><div class="star" style="left: 44.2047px; top: 32.5481px; opacity: 0.485889;"></div><div class="star" style="left: 63.8417px; top: 171.239px; opacity: 0.449888;"></div><div class="star" style="left: 192.114px; top: 116.427px; opacity: 0.790614;"></div><div class="star" style="left: 4.81448px; top: 32.1837px; opacity: 0.719417;"></div><div class="star" style="left: 355.614px; top: 38.7714px; opacity: 0.891678;"></div><div class="star" style="left: 143.101px; top: 9.70493px; opacity: 0.834631;"></div><div class="star" style="left: 148.687px; top: 136.282px; opacity: 0.214866;"></div><div class="star" style="left: 291.266px; top: 155.614px; opacity: 0.878895;"></div><div class="star" style="left: 204.912px; top: 66.552px; opacity: 0.812372;"></div><div class="star" style="left: 11.6599px; top: 84.7946px; opacity: 0.956004;"></div><div class="star" style="left: 68.5505px; top: 112.467px; opacity: 0.389588;"></div><div class="star" style="left: 105.702px; top: 150.141px; opacity: 0.609039;"></div><div class="star" style="left: 164.037px; top: 184.47px; opacity: 0.855624;"></div><div class="star" style="left: 361.267px; top: 98.0828px; opacity: 0.948278;"></div><div class="star" style="left: 1.07902px; top: 9.84182px; opacity: 0.542657;"></div><div class="star" style="left: 176.612px; top: 46.6134px; opacity: 0.325458;"></div><div class="star" style="left: 51.5966px; top: 5.56285px; opacity: 0.827652;"></div><div class="star" style="left: 261.408px; top: 197.384px; opacity: 0.263598;"></div><div class="star" style="left: 115.088px; top: 90.2976px; opacity: 0.626696;"></div><div class="star" style="left: 359.608px; top: 158.263px; opacity: 0.648772;"></div><div class="star" style="left: 44.2695px; top: 165.674px; opacity: 0.527729;"></div><div class="star" style="left: 45.0526px; top: 197.025px; opacity: 0.668104;"></div><div class="star" style="left: 257.248px; top: 187.648px; opacity: 0.239493;"></div></div>
+  <div id="clouds"><div class="cloud" style="left: 183.2px; width: 65.2342px; top: 33.1254px;"></div><div class="cloud" style="left: 283.2px; width: 86.2563px; top: 15.028px;"></div><div class="cloud" style="left: -36.8px; width: 66.594px; top: 14.6715px;"></div><div class="cloud" style="left: 63.2px; width: 64.0387px; top: 21.7159px;"></div></div>
+  <div id="grass"></div>
+  <div id="ground"></div>
+
+  <div id="score-bar">
+    <div id="score-txt">SCORE <span id="sc">44</span></div>
+    <div id="hi-txt">BEST <span id="hi">441</span></div>
+    <div id="lives-txt">❤️<span id="lv">0</span></div>
+  </div>
+  <div id="combo" style="opacity: 0;"></div>
+  <div id="msg" style="color: rgb(255, 68, 68); opacity: 0;">OUCH! -1 LIFE</div>
+  <div id="coins-row"><div class="coin" style="bottom: 120px; left: -12.3877px;"></div><div class="coin" style="bottom: 80px; left: 100.726px;"></div><div class="coin" style="bottom: 80px; left: 268.093px;"></div><div class="coin" style="bottom: 120px; left: 372.415px;"></div></div>
+  <div id="trail"></div>
+
+  <div id="player" style="bottom: 144px; transform: scaleY(1); opacity: 0.3;">
+    <svg width="40" height="48" viewBox="0 0 40 48">
+      <rect x="4" y="0" width="32" height="32" rx="6" fill="#4a9eff"></rect>
+      <rect x="4" y="0" width="32" height="16" rx="6" fill="#2a7eff"></rect>
+      <circle cx="13" cy="12" r="6" fill="#fff"></circle>
+      <circle cx="27" cy="12" r="6" fill="#fff"></circle>
+      <circle cx="14" cy="13" r="3" fill="#000"></circle>
+      <circle cx="28" cy="13" r="3" fill="#000"></circle>
+      <rect x="4" y="28" width="32" height="16" rx="4" fill="#1a5acc"></rect>
+      <rect x="6" y="36" width="12" height="12" rx="3" fill="#0a3a9a"></rect>
+      <rect x="22" y="36" width="12" height="12" rx="3" fill="#0a3a9a"></rect>
+    </svg>
+  </div>
+
+  <div id="tap-hint">TAP / SPACE TO JUMP</div>
+
+  <div id="overlay" style="display: flex;"><h1 style="color:#f44">GAME<br>OVER</h1>
+      <p style="font-size:8px;color:#fff">SCORE: 441</p>
+      <p style="font-size:8px;color:#ff0">BEST: 441</p>
+      <p style="font-size:7px;color:#aaa;margin-top:4px">ur bad lol</p>
+      <button id="btn">▶ RETRY</button></div>
+<div class="obs" style="left: 218.395px;"></div><div class="obs" style="left: 370.27px;"></div></div>
+
+<script>
+const G=document.getElementById('g');
+const player=document.getElementById('player');
+const scEl=document.getElementById('sc');
+const hiEl=document.getElementById('hi');
+const lvEl=document.getElementById('lv');
+const overlay=document.getElementById('overlay');
+const btn=document.getElementById('btn');
+const coinsRow=document.getElementById('coins-row');
+const trail=document.getElementById('trail');
+const comboEl=document.getElementById('combo');
+const msgEl=document.getElementById('msg');
+const starsEl=document.getElementById('stars');
+const cloudsEl=document.getElementById('clouds');
+
+for(let i=0;i<40;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.left=Math.random()*380+'px';
+  s.style.top=Math.random()*200+'px';
+  s.style.opacity=Math.random()*0.8+0.2;
+  starsEl.appendChild(s);
+}
+for(let i=0;i<4;i++){
+  const c=document.createElement('div');
+  c.className='cloud';
+  c.style.left=(i*100+20)+'px';
+  c.style.width=(60+Math.random()*40)+'px';
+  c.style.top=(Math.random()*30+10)+'px';
+  cloudsEl.appendChild(c);
+}
+
+let py=144,vy=0,onGround=true,jumping=false;
+let score=0,hi=0,lives=3;
+let gameRunning=false;
+let obstacles=[],coins=[];
+let spawnTimer=0,coinTimer=0;
+let speed=3.5;
+let invincible=0;
+let combo=0,comboTimer=0;
+let cloudX=[20,120,220,320];
+let dustTimer=0;
+const GRAVITY=0.7,JUMP=-13,GROUND=144;
+
+function showMsg(t,c='#ff6'){
+  msgEl.textContent=t;msgEl.style.color=c;msgEl.style.opacity='1';
+  setTimeout(()=>{msgEl.style.opacity='0'},800);
+}
+
+function spawnObs(){
+  const d=document.createElement('div');
+  d.className='obs';
+  d.style.left='400px';
+  obstacles.push({el:d,x:400});
+  G.appendChild(d);
+}
+function spawnCoin(x){
+  const c=document.createElement('div');
+  c.className='coin';
+  const h=Math.random()<0.4?120:80;
+  c.style.bottom=h+'px';
+  c.style.left=x+'px';
+  coins.push({el:c,x:x,bottom:h});
+  coinsRow.appendChild(c);
+}
+function makeDust(){
+  if(!onGround)return;
+  const d=document.createElement('div');
+  d.className='dust';
+  d.style.left='60px';
+  d.style.bottom='144px';
+  trail.appendChild(d);
+  let op=0.7,bx=60;
+  const iv=setInterval(()=>{
+    op-=0.12;bx-=2;
+    d.style.opacity=op;d.style.left=bx+'px';
+    if(op<=0){clearInterval(iv);d.remove();}
+  },30);
+}
+
+function playerRect(){
+  return{x:40,y:600-py-48,w:28,h:40};
+}
+function obsRect(o){
+  return{x:o.x+2,y:600-144-48+8,w:28,h:40};
+}
+function coinRect(c){
+  return{x:c.x,y:600-c.bottom-18,w:18,h:18};
+}
+function overlaps(a,b){
+  return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+}
+
+function jump(){
+  if(!gameRunning)return;
+  if(onGround){
+    vy=JUMP;onGround=false;
+    makeDust();
+  }else if(py>200){
+    vy=JUMP*0.7;
+  }
+}
+
+function gameOver(){
+  lives--;lvEl.textContent=lives;
+  invincible=120;
+  if(lives<=0){
+    gameRunning=false;
+    if(score>hi){hi=score;hiEl.textContent=hi;}
+    overlay.innerHTML=`<h1 style="color:#f44">GAME<br>OVER</h1>
+      <p style="font-size:8px;color:#fff">SCORE: ${score}</p>
+      <p style="font-size:8px;color:#ff0">BEST: ${Math.max(score,hi)}</p>
+      <p style="font-size:7px;color:#aaa;margin-top:4px">ur bad lol</p>
+      <button id="btn">▶ RETRY</button>`;
+    overlay.style.display='flex';
+    document.getElementById('btn').onclick=startGame;
+  }else{
+    showMsg('OUCH! -1 LIFE','#f44');
+  }
+}
+
+function startGame(){
+  score=0;lives=3;speed=3.5;combo=0;
+  obstacles.forEach(o=>o.el.remove());
+  coins.forEach(c=>c.el.remove());
+  obstacles=[];coins=[];
+  spawnTimer=80;coinTimer=40;
+  py=GROUND;vy=0;onGround=true;invincible=0;
+  scEl.textContent=0;lvEl.textContent=3;
+  overlay.style.display='none';
+  gameRunning=true;
+  requestAnimationFrame(loop);
+}
+
+let last=0;
+function loop(ts){
+  if(!gameRunning)return;
+  const dt=Math.min(ts-last,50);last=ts;
+
+  vy+=GRAVITY;
+  py=Math.max(GROUND,py-vy);
+  if(py<=GROUND){py=GROUND;vy=0;onGround=true;}else{onGround=false;}
+  player.style.bottom=py+'px';
+
+  const squat=onGround&&vy>2?`scaleY(0.85) scaleX(1.1)`:(onGround?'scaleY(1)':'scaleY(0.9) scaleX(1.1)');
+  player.style.transform=squat;
+  if(invincible>0){player.style.opacity=(Math.floor(invincible/6)%2===0)?'0.3':'1';invincible--;}
+  else player.style.opacity='1';
+
+  dustTimer++;if(dustTimer%8===0&&onGround)makeDust();
+
+  cloudX=cloudX.map((x,i)=>{
+    const nx=(x-0.4+380)%420-40;
+    cloudsEl.children[i].style.left=nx+'px';
+    return nx;
+  });
+
+  spawnTimer--;
+  if(spawnTimer<=0){
+    spawnObs();
+    spawnTimer=Math.max(40,90-score/8);
+  }
+  coinTimer--;
+  if(coinTimer<=0){
+    spawnCoin(420+Math.random()*60);
+    coinTimer=Math.max(30,70-score/10);
+  }
+
+  const pr=playerRect();
+  obstacles=obstacles.filter(o=>{
+    o.x-=speed;o.el.style.left=o.x+'px';
+    if(invincible===0&&overlaps(pr,obsRect(o))){
+      o.el.remove();
+      gameOver();
+      combo=0;comboEl.style.opacity='0';
+      return false;
+    }
+    if(o.x<-50){o.el.remove();return false;}
+    return true;
+  });
+  coins=coins.filter(c=>{
+    c.x-=speed;c.el.style.left=c.x+'px';
+    if(overlaps(pr,coinRect(c))){
+      c.el.remove();
+      score+=10;combo++;comboTimer=90;
+      if(combo>=3){score+=combo*5;showMsg(`COMBO x${combo}! +${combo*5}`,'#ff0');}
+      scEl.textContent=score;
+      comboEl.textContent=`x${combo}`;comboEl.style.opacity='1';
+      speed=3.5+score/300;
+      return false;
+    }
+    if(c.x<-30){c.el.remove();combo=0;comboEl.style.opacity='0';return false;}
+    return true;
+  });
+
+  if(comboTimer>0)comboTimer--;else{combo=0;comboEl.style.opacity='0';}
+
+  score++;scEl.textContent=Math.floor(score/10);
+  speed=3.5+Math.floor(score/10)/200;
+
+  requestAnimationFrame(loop);
+}
+
+btn.onclick=startGame;
+document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();jump();}});
+G.addEventListener('touchstart',e=>{e.preventDefault();jump();},{passive:false});
+G.addEventListener('mousedown',jump);
+</script>
+</body></html>
